@@ -52,6 +52,7 @@ for n,ligne in enumerate(Matrices):
 BestDiskLL=list()
 BestFiberLL1=list()
 Parameters = list()
+DE = list()
 for Matrice in Matrices:
     BestDiskL=list()
     BestFiberL1 = list()
@@ -68,10 +69,12 @@ for Matrice in Matrices:
         BestFiberL1.append(bf.Get_Best_Fiber(Param,type=1))
     BestDiskL = np.array(BestDiskL)
     BestFiberL1 = np.array(BestFiberL1)
+    DE.append(BestDiskL[:,1]-BestFiberL1[:,1])
     BestDiskLL.append(BestDiskL)
     BestFiberLL1.append(BestFiberL1)
     Parameters.append([nu,Ell,Matrice[-2],GammaMax])
 
+DE = np.array(DE)
 BestFiberLL1 = np.array(BestFiberLL1)
 BestDiskLL = np.array(BestDiskLL)
 Parameters=np.array(Parameters)
@@ -79,6 +82,7 @@ Parameters=np.array(Parameters)
 #sort by Poisson ratio
 BestDiskLL = BestDiskLL[Parameters[:,0].argsort()]
 BestFiberLL1 = BestFiberLL1[Parameters[:,0].argsort()]
+DE=DE[Parameters[:,0].argsort()]
 Aggregates=list()
 for n in range(BestFiberLL1.__len__()):
     BFL1 = BestFiberLL1[n]#BFSorted1[n][0]
@@ -90,5 +94,6 @@ for n in range(BestFiberLL1.__len__()):
         else :
             BestAgg[i] = [BFL1[i,0],0]
     Aggregates.append(BestAgg)
+np.save('DeltaE_'+str(SimNum),DE,allow_pickle=True)
 np.save('Aggregates_'+str(SimNum),Aggregates,allow_pickle=True)
 np.save('Parameters_'+str(SimNum),Parameters,allow_pickle=True)
