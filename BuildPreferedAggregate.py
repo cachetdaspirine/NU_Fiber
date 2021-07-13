@@ -7,6 +7,7 @@ import os
 sys.path.append('/home/hleroy/Simulation/Extra_Module_py')
 from Numeric_Fiber_Energy import *
 from Numeric_Hex_Energy import *
+from Functions import *
 import Conversion as Conv
 import RandomParticleObject as RPO
 import RandomParticleFunctions_v4 as RPF
@@ -35,7 +36,7 @@ def Get_GammaMax(bf,bh,P):
 
 # Import the data
 SimNum = int(sys.argv[1])
-Nparticles = 50
+Nparticles = 10
 Data = np.loadtxt('Matrix_1.dat',dtype=float)
 Data = Data[Data[:,1].argsort()]
 Data = Data[Data.shape[0]-(SimNum+1)*Nparticles:Data.shape[0]-(SimNum)*Nparticles]
@@ -52,16 +53,17 @@ for n,ligne in enumerate(Matrices):
 BestDiskLL=list()
 BestFiberLL1=list()
 Parameters = list()
+seeds = np.zeros(Matrices.shape[0],dtype=np.int_)
 DE = list()
-for Matrice in Matrices:
+for num, Matrice in enumerate(Matrices):
     BestDiskL=list()
     BestFiberL1 = list()
     Mc,rho0,e1,e2,seed = RPF.RandomParticle(seed=int(Matrice[-2]))
     Param = Conv.MatrixToContinuum(Mc,rho0,e1,e2,Gamma=0.)
     bh = BD(Nmax,Param,Expansion=True,Mc=Mc,q0=rho0)
     bf = BF(Wmax,Param,Expansion=True,Mc=Mc,q0=rho0)
-    nu = Matrice[-1]#ComputePoissonRatio(Particle.Mc,Particle.rho0)
-    Ell = Matrice[1]#Particle.length
+    nu = MP.ComputePoissonRatio(Mc,rho0)#Matrice[-1]#ComputePoissonRatio(Particle.Mc,Particle.rho0)
+    Ell = MeasureL(Mc,rho0)#Matrice[1]#Particle.length
     GammaMax = Get_GammaMax(bf,bh,Param)
     for gamma in np.linspace(0.,GammaMax,100):
         Param = Conv.MatrixToContinuum(Mc,rho0,e1,e2,Gamma=gamma)
@@ -72,7 +74,8 @@ for Matrice in Matrices:
     DE.append(BestDiskL[:,1]-BestFiberL1[:,1])
     BestDiskLL.append(BestDiskL)
     BestFiberLL1.append(BestFiberL1)
-    Parameters.append([nu,Ell,Matrice[-2],GammaMax])
+    Parameters.append([nu,Ell,GammaMax])
+    seeds[num] = int(Matrice[-2])
 
 DE = np.array(DE)
 BestFiberLL1 = np.array(BestFiberLL1)
@@ -94,6 +97,7 @@ for n in range(BestFiberLL1.__len__()):
         else :
             BestAgg[i] = [BFL1[i,0],0]
     Aggregates.append(BestAgg)
+np.save('Seeds_'+str(SimNum),seeds,allow_pickle=True)
 np.save('DeltaE_'+str(SimNum),DE,allow_pickle=True)
 np.save('Aggregates_'+str(SimNum),Aggregates,allow_pickle=True)
 np.save('Parameters_'+str(SimNum),Parameters,allow_pickle=True)
