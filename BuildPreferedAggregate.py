@@ -96,7 +96,7 @@ DE=DE[Parameters[:,0].argsort()]
 Parameters = Parameters[Parameters[:,0].argsort()]
 
 np.save('Disks_'+str(SimNum),BestDiskLL,allow_pickle=True)
-np.save('Fiber_'+str(SimNum),BestFiberL1,allow_pickle=True)
+np.save('Fiber_'+str(SimNum),BestFiberLL1,allow_pickle=True)
 
 Aggregates=list()
 for n in range(BestFiberLL1.__len__()):
