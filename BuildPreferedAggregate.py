@@ -36,10 +36,11 @@ def Get_GammaMax(bf,bh,P):
 
 # Import the data
 SimNum = int(sys.argv[1])
-Nparticles = 10
-Data = np.loadtxt('Matrix_1.dat',dtype=float)
+Start = 4000
+Nparticles = 50
+Data = np.loadtxt('Matrix.data',dtype=float)
 Data = Data[Data[:,1].argsort()]
-Data = Data[Data.shape[0]-(SimNum+1)*Nparticles:Data.shape[0]-(SimNum)*Nparticles]
+Data = Data[Data.shape[0]-(SimNum+1)*Nparticles-Start:Data.shape[0]-(SimNum)*Nparticles-Start]
 print('The smallest lmes =' +str(Data[0,1]))
 Matrices = np.zeros((Nparticles,4),dtype=float)
 Matrices[:,:-1] = Data

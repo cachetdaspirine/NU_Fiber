@@ -2,3 +2,6 @@ slurm*
 DeltaE*
 Aggregate*
 Parameter*
+*.npy
+__*
+*.data
