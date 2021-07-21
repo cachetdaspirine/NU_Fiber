@@ -46,7 +46,7 @@ rng = default_rng()
 indexs = rng.choice(100,size=10,replace=False)
 #Data = Data[Data.shape[0]-(SimNum+1)*Nparticles-Start:Data.shape[0]-(SimNum)*Nparticles-Start]
 Data = Data[dN*SimNum:dN*(SimNum+1)][indexs]
-Matrices = np.zeros((Nparticles,4),dtype=float)
+Matrices = np.zeros((Nparticles,6),dtype=float)
 Matrices[:,:-1] = Data
 
 for n,ligne in enumerate(Matrices):
