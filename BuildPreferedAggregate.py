@@ -87,10 +87,17 @@ BestFiberLL1 = np.array(BestFiberLL1)
 BestDiskLL = np.array(BestDiskLL)
 Parameters=np.array(Parameters)
 
+
+
 #sort by Poisson ratio
 BestDiskLL = BestDiskLL[Parameters[:,0].argsort()]
 BestFiberLL1 = BestFiberLL1[Parameters[:,0].argsort()]
 DE=DE[Parameters[:,0].argsort()]
+Parameters = Parameters[Parameters[:,0].argsort()]
+
+np.save('Disks_'+str(SimNum),BestDiskLL,allow_pickle=True)
+np.save('Fiber_'+str(SimNum),BestFiberL1,allow_pickle=True)
+
 Aggregates=list()
 for n in range(BestFiberLL1.__len__()):
     BFL1 = BestFiberLL1[n]#BFSorted1[n][0]
