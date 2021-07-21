@@ -1,4 +1,5 @@
 import numpy as np
+from numpy.random import default_rng
 import math
 import sys
 import os
@@ -36,12 +37,15 @@ def Get_GammaMax(bf,bh,P):
 
 # Import the data
 SimNum = int(sys.argv[1])
-Start = 4000
-Nparticles = 50
+#Start = 4000
+Nparticles = 10
 Data = np.loadtxt('Matrix.data',dtype=float)
 Data = Data[Data[:,1].argsort()]
-Data = Data[Data.shape[0]-(SimNum+1)*Nparticles-Start:Data.shape[0]-(SimNum)*Nparticles-Start]
-print('The smallest lmes =' +str(Data[0,1]))
+dN = Data.shape[0]//100
+rng = default_rng()
+indexs = rng.choice(100,size=10,replace=False)
+#Data = Data[Data.shape[0]-(SimNum+1)*Nparticles-Start:Data.shape[0]-(SimNum)*Nparticles-Start]
+Data = Data[dN*SimNum:dN*(SimNum+1)][indexs]
 Matrices = np.zeros((Nparticles,4),dtype=float)
 Matrices[:,:-1] = Data
 
@@ -63,8 +67,8 @@ for num, Matrice in enumerate(Matrices):
     Param = Conv.MatrixToContinuum(Mc,rho0,e1,e2,Gamma=0.)
     bh = BD(Nmax,Param,Expansion=True,Mc=Mc,q0=rho0)
     bf = BF(Wmax,Param,Expansion=True,Mc=Mc,q0=rho0)
-    nu = MP.ComputePoissonRatio(Mc,rho0)#Matrice[-1]#ComputePoissonRatio(Particle.Mc,Particle.rho0)
-    Ell = MeasureL(Mc,rho0)#Matrice[1]#Particle.length
+    nu = Matrice[-1]#MP.ComputePoissonRatio(Mc,rho0)#ComputePoissonRatio(Particle.Mc,Particle.rho0)
+    Ell = Matrice[1]#MeasureL(Mc,rho0)#Particle.length
     GammaMax = Get_GammaMax(bf,bh,Param)
     for gamma in np.linspace(0.,GammaMax,100):
         Param = Conv.MatrixToContinuum(Mc,rho0,e1,e2,Gamma=gamma)
