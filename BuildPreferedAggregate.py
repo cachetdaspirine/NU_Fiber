@@ -79,7 +79,7 @@ for num, Matrice in enumerate(Matrices):
     DE.append(BestDiskL[:,1]-BestFiberL1[:,1])
     BestDiskLL.append(BestDiskL)
     BestFiberLL1.append(BestFiberL1)
-    Parameters.append([nu,Ell,GammaMax])
+    Parameters.append([nu,Ell,Matrice[2],Matrice[3],GammaMax])
     seeds[num] = int(Matrice[-2])
 
 DE = np.array(DE)

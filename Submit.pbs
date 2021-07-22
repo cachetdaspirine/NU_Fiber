@@ -2,7 +2,7 @@
 #PBS -V
 #PBS -q q-1jour
 #PBS -M hugo.le-roy@u-psud.fr
-#PBS -m bae
+#PBS -m ae
 
 #On se place dans le repertoire de travail
 cd /home/hleroy/Simulation/NU_Fiber
